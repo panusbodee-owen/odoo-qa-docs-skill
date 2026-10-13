@@ -1,4 +1,8 @@
-# Claude Skill for Odoo QA & Documentation (all versions)
+# Claude Skills for Odoo — QA, Documentation & Development (all versions)
+
+This repository contains two skills: `odoo-qa-docs` (QA & documents) and `odoo-dev` (development).
+
+## Skill 1 — `odoo-qa-docs` (QA & documentation)
 
 The `odoo-qa-docs` skill helps testers, functional consultants and project managers on Odoo implementation projects in Thailand. It supports Odoo 16–19 and future versions (20+).
 
@@ -10,7 +14,31 @@ The `odoo-qa-docs` skill helps testers, functional consultants and project manag
 | Bug Report | Turns a tester's rough note into a standard defect report | Markdown |
 | Upgrade Regression | Before/after data reconciliation + test cases for every version change | Excel |
 
-## Structure
+## Skill 2 — `odoo-dev` (Odoo developer)
+
+Helps developers build and maintain custom Odoo modules for versions 16–19 and future releases.
+
+| Task | How |
+|---|---|
+| New module | `scripts/scaffold.py` generates a version-correct skeleton: model, list/form views, action, menu, access rights and a unit test |
+| Upgrade / port / review | `scripts/check_compat.py` lists deprecated patterns for the target version (`attrs`, `<tree>`, `name_get`, `oe_chatter`, `group_operator`, `detailed_type`, …) with file:line |
+| Models, views, security, wizards, cron, QWeb reports, controllers | `references/patterns.md` |
+| Tests and debugging | `references/testing.md` (TransactionCase, Form, tours, odoo-bin commands) |
+| Thai requirements | `references/l10n-th.md` (baht text, Buddhist year, Thai PDF fonts, Tax ID checksum, branch, WHT) |
+| Version differences | `references/versions.md` — one table of rules; unknown future versions get `(verify)` tags until confirmed |
+
+```bash
+python3 .claude/skills/odoo-dev/scripts/scaffold.py my_request --version 18 --model x.request --depends base,mail --path addons
+python3 .claude/skills/odoo-dev/scripts/check_compat.py addons/my_module --version 18
+```
+
+Example prompts:
+- `Create a module for purchase requests with two-step approval, Odoo 18`
+- `Port addons/my_module from 16 to 18`
+- `Add a Thai tax invoice PDF with baht text and Buddhist year`
+- `Write unit tests for TC-SO-001..005` (links QA test cases from `odoo-qa-docs` to automated tests)
+
+## Structure (odoo-qa-docs)
 ```
 .claude/skills/odoo-qa-docs/
 ├── SKILL.md            # core rules + mode router (kept as short as possible)
@@ -34,7 +62,7 @@ Menu names in claude.ai may change over time; look for the Skills section under 
 ```bash
 git clone https://github.com/panusbodee-owen/odoo-qa-docs-skill.git
 mkdir -p ~/.claude/skills
-cp -r odoo-qa-docs-skill/.claude/skills/odoo-qa-docs ~/.claude/skills/
+cp -r odoo-qa-docs-skill/.claude/skills/odoo-qa-docs odoo-qa-docs-skill/.claude/skills/odoo-dev ~/.claude/skills/
 ```
 Windows: copy the folder to `C:\Users\<username>\.claude\skills\`.
 For a single project, place it in that project's `.claude/skills/` instead.
